@@ -1,0 +1,14 @@
+node_modules
+dist
+out
+*.exe
+*.zip
+*.msi
+.git
+.vercel
+.vscode
+.gemini
+tmp
+assets/product_logo_old.png
+prismwsp_logo_*.png
+media__*.png

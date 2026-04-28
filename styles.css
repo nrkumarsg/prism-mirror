@@ -9,13 +9,16 @@
     --glass-bg: rgba(255, 255, 255, 0.03);
     --glass-border: rgba(255, 255, 255, 0.05);
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    --sidebar-width: 70px;
+    --sidebar-width: 60px;
+    --sidebar-width-collapsed: 0px;
     --account-list-width: 280px;
+    --account-list-width-mini: 70px;
     --account-list-width-collapsed: 0px;
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --whatsapp-green: #10b981;
     --whatsapp-dark: #075e54;
     --landing-bg: linear-gradient(135deg, #059669, #10b981);
+    --resizer-width: 4px;
 }
 
 * {
@@ -31,6 +34,45 @@ body {
     height: 100vh;
     overflow: hidden;
     display: flex;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.pulse-active {
+    position: relative;
+}
+
+.pulse-active::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    right: -2px;
+    top: -2px;
+    box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 
 /* Layout */
@@ -50,6 +92,14 @@ body {
     padding: 20px 0;
     border-right: 1px solid var(--glass-border);
     z-index: 100;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.sidebar-switcher.collapsed {
+    width: var(--sidebar-width-collapsed);
+    border-right: none;
+    padding: 0;
 }
 
 .switcher-item {
@@ -70,6 +120,12 @@ body {
 .switcher-item:hover {
     border-color: var(--accent-primary);
     transform: translateY(-2px);
+    color: var(--accent-primary);
+}
+
+#helpBtn:hover {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
 }
 
 .switcher-item.active {
@@ -90,15 +146,50 @@ body {
     display: flex;
     flex-direction: column;
     border-right: 1px solid var(--glass-border);
-    transition: var(--transition-smooth);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
     overflow: hidden;
+    position: relative;
 }
 
-.app-container.collapsed .account-panel {
+.account-panel.mini {
+    width: var(--account-list-width-mini);
+}
+
+.account-panel.collapsed {
     width: var(--account-list-width-collapsed);
     border-right: none;
     opacity: 0;
     pointer-events: none;
+}
+
+/* Mini State Hide Elements */
+.account-panel.mini .panel-header h2,
+.account-panel.mini .panel-header p,
+.account-panel.mini .search-box,
+.account-panel.mini .account-info,
+.account-panel.mini .add-account-btn span,
+.account-panel.mini .account-item i.fa-chevron-right {
+    display: none !important;
+}
+
+.account-panel.mini .panel-header {
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.account-panel.mini .account-item {
+    justify-content: center;
+    padding: 12px 0;
+}
+
+.account-panel.mini .add-account-btn {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 12px;
+    margin: 12px auto;
 }
 
 .panel-header {
@@ -143,6 +234,25 @@ body {
 .account-item.active {
     background: rgba(16, 185, 129, 0.1);
     border-color: var(--accent-primary);
+}
+
+.delete-icon {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    opacity: 0;
+    transition: var(--transition-smooth);
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.account-item:hover .delete-icon {
+    opacity: 0.6;
+}
+
+.delete-icon:hover {
+    opacity: 1 !important;
+    color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.1);
 }
 
 .account-avatar {
@@ -210,6 +320,31 @@ body {
     justify-content: space-between;
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--glass-border);
+    z-index: 10;
+}
+
+/* Resizers */
+.resizer {
+    width: var(--resizer-width);
+    cursor: col-resize;
+    background: transparent;
+    transition: background 0.2s;
+    z-index: 150;
+    position: relative;
+}
+
+.resizer:hover, .resizer.dragging {
+    background: var(--accent-primary);
+    box-shadow: 0 0 10px var(--accent-primary);
+}
+
+.resizer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -4px;
+    right: -4px;
 }
 
 .brand-badge {
@@ -266,6 +401,37 @@ body {
     padding: var(--window-gap, 8px);
     background: var(--bg-primary);
     transition: var(--transition-smooth);
+    overflow: hidden;
+}
+
+.webview-container.maximized {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1000;
+    border: none;
+    border-radius: 0;
+}
+
+.webview-container {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+/* Dragging Support */
+.viewport-content.dragging-active .webview-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(16, 185, 129, 0.05);
+    z-index: 100;
+    pointer-events: auto;
+    border: 2px dashed var(--accent-primary);
+    border-radius: 8px;
 }
 
 .viewport-content.grid-1 {
@@ -503,8 +669,30 @@ input:checked + .slider:before {
 }
 
 .webview-container.drag-over {
-    box-shadow: inset 0 0 0 2px var(--accent-primary);
-    background: rgba(16, 185, 129, 0.05);
+    box-shadow: inset 0 0 0 3px var(--accent-primary);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.slot-tool-btn {
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+    font-size: 0.8rem;
+}
+
+.slot-tool-btn:hover {
+    background: var(--accent-primary);
+    border-color: white;
+    transform: scale(1.1);
 }
 
 /* Split View QR (Picture 3 Style) */

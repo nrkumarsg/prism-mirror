@@ -3,254 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrismWSP - Premium Multi-WhatsApp Manager</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Prism Mirror™ Suite - Professional Multi-WhatsApp Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #10b981;
+            --dark-green: #064e3b;
+            --bg-black: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f0f0f0;
+            --text-dim: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-black); 
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background Glows */
+        .glow {
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(60px);
+        }
+        .glow-1 { top: -10%; right: -5%; }
+        .glow-2 { bottom: -10%; left: -5%; }
+
+        /* Navigation */
+        nav {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-logo { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.2rem; }
+        .nav-logo img { width: 32px; border-radius: 6px; }
+
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a { color: var(--text-dim); text-decoration: none; transition: 0.3s; font-size: 0.9rem; }
+        .nav-links a:hover { color: var(--primary-green); }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 8% 100px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-logo { width: 120px; margin-bottom: 30px; animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; letter-spacing: -1px; }
+        .hero h1 span { color: var(--primary-green); }
+        .hero p { font-size: 1.2rem; color: var(--text-dim); max-width: 600px; margin-bottom: 40px; }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+        .btn-primary { background: var(--primary-green); color: white; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
+        .btn-primary:hover { transform: translateY(-3px); filter: brightness(1.1); }
+
+        /* Features */
+        .features { padding: 100px 8%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .feature-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+        .feature-card:hover { border-color: var(--primary-green); transform: translateY(-5px); }
+        .feature-card i { font-size: 2rem; color: var(--primary-green); margin-bottom: 20px; }
+        .feature-card h3 { margin-bottom: 15px; }
+        .feature-card p { color: var(--text-dim); font-size: 0.95rem; }
+
+        /* About & Company */
+        .section-split { padding: 100px 8%; display: flex; gap: 80px; align-items: center; }
+        .section-text { flex: 1; }
+        .section-text h2 { font-size: 2.5rem; margin-bottom: 25px; }
+        .section-text p { color: var(--text-dim); margin-bottom: 20px; font-size: 1.1rem; }
+
+        /* Contact */
+        .contact { padding: 100px 8%; text-align: center; }
+        .contact-box {
+            background: linear-gradient(135deg, var(--dark-green), #0a0a0a);
+            padding: 60px;
+            border-radius: 32px;
+            border: 1px solid var(--glass-border);
+        }
+        .contact h2 { margin-bottom: 20px; font-size: 2rem; }
+        .contact-links { display: flex; justify-content: center; gap: 30px; margin-top: 30px; }
+        .contact-link { color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 1.1rem; transition: 0.3s; }
+        .contact-link:hover { color: var(--primary-green); }
+
+        /* Footer */
+        footer { padding: 50px 8%; border-top: 1px solid var(--glass-border); text-align: center; color: var(--text-dim); font-size: 0.9rem; }
+        
+        /* Voucher Modal Styles */
+        .voucher-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .voucher-modal-content {
+            background: #0f0f0f;
+            border: 1px solid var(--glass-border);
+            padding: 50px 40px;
+            border-radius: 32px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: none; border: none;
+            color: var(--text-dim);
+            font-size: 1.5rem; cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-modal:hover { color: white; }
+
+        #voucherInput:focus { border-color: var(--primary-green); box-shadow: 0 0 15px rgba(16, 185, 129, 0.2); }
+
+        @media (max-width: 900px) {
+            .features { grid-template-columns: 1fr; }
+            .section-split { flex-direction: column; text-align: center; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Sidebar Switcher -->
-        <aside class="sidebar-switcher" id="sidebarSwitcher">
-            <!-- Toggle Sidebar Button -->
-            <div class="switcher-item" id="togglePanelBtn" title="Toggle Account Panel" style="background: transparent; border-bottom: 1px solid var(--glass-border); margin-bottom: 24px; border-radius: 0; width: 100%;">
-                <i class="fas fa-bars"></i>
-            </div>
-            <!-- Logo Section -->
-            <div class="app-logo" style="margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
-                <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="prismGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#10b981" />
-                            <stop offset="100%" style="stop-color:#3b82f6" />
-                        </linearGradient>
-                        <filter id="glow">
-                            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-                            <feMerge>
-                                <feMergeNode in="coloredBlur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                    </defs>
-                    <path d="M50 15L85 75H15L50 15Z" stroke="url(#prismGrad)" stroke-width="4" filter="url(#glow)"/>
-                    <path d="M50 15V75" stroke="url(#prismGrad)" stroke-opacity="0.3" stroke-width="2"/>
-                    <path d="M15 75L50 45L85 75" stroke="url(#prismGrad)" stroke-opacity="0.3" stroke-width="2"/>
-                </svg>
-                <div class="brand-text" style="font-size: 0.6rem; font-weight: 700; color: var(--accent-primary); letter-spacing: 1px; text-align: center;">CEL-RON</div>
-            </div>
-            <!-- switcher items will be injected here -->
-            <div class="switcher-item" title="Settings" id="globalSettingsBtn">
-                <i class="fas fa-cog"></i>
-            </div>
-        </aside>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
 
-        <!-- Account Panel -->
-        <section class="account-panel">
-            <header class="panel-header">
-                <h2>Accounts</h2>
-                <p id="accountCount">0 accounts active</p>
-                <div class="search-box" style="margin-top: 16px; position: relative;">
-                    <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 0.8rem;"></i>
-                    <input type="text" id="accountSearch" placeholder="Search accounts..." style="width: 100%; padding: 8px 12px 8px 32px; background: var(--bg-primary); border: 1px solid var(--glass-border); border-radius: 8px; color: white; font-size: 0.85rem; outline: none;">
-                </div>
-            </header>
-            
-            <div class="account-list" id="accountList">
-                <!-- account items will be injected here -->
-            </div>
+    <nav>
+        <div class="nav-logo">
+            <img src="assets/product_logo.png" alt="Prism Mirror Logo">
+            <span>Prism Mirror™</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
-            <button class="add-account-btn" id="addAccountBtn">
-                <i class="fas fa-plus"></i>
-                Add Account
+    <header class="hero" id="home">
+        <img src="assets/product_logo.png" alt="Prism Mirror Logo" class="hero-logo">
+        <h1>Powerful Multi-WhatsApp <span>Suite</span></h1>
+        <p>The premium desktop solution for managing multiple WhatsApp accounts simultaneously with high-performance Prism Mirror™ technology.</p>
+        <div style="display: flex; gap: 20px;">
+            <button class="btn btn-primary" id="downloadBtnTrigger">
+                <i class="fas fa-download"></i> Download for Windows
             </button>
-        </section>
+            <a href="#features" class="btn" style="border: 1px solid var(--glass-border);">Learn More</a>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">Current Version: 1.0.0 (Windows Installer)</p>
+    </header>
 
-        <!-- Main Viewport -->
-        <main class="main-viewport">
-            <header class="viewport-header" id="viewportHeader">
-                <div class="active-account-info">
-                    <span id="activeAccountName">Select an account</span>
-                    <span class="brand-badge">by CEL-RON</span>
-                </div>
-                <div class="layout-switcher" id="layoutSwitcher">
-                    <button class="layout-btn active" data-layout="1" title="Single View"><i class="fas fa-square"></i></button>
-                    <button class="layout-btn" data-layout="2" title="Prism Mirror: Dual View"><i class="fas fa-columns"></i></button>
-                    <button class="layout-btn" data-layout="4" title="Prism Mirror: Quad View"><i class="fas fa-th-large"></i></button>
-                </div>
-                <div class="viewport-actions">
-                    <button class="btn btn-secondary" id="editProfileBtn" style="padding: 6px 12px; font-size: 0.8rem; display: none;">
-                        <i class="fas fa-edit"></i> Edit Profile
-                    </button>
-                </div>
-            </header>
+    <section class="features" id="features">
+        <div class="feature-card">
+            <i class="fas fa-layer-group"></i>
+            <h3>Multi-Account</h3>
+            <p>Connect and manage up to 4 accounts in a single workspace. Each session is fully isolated and secure.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-columns"></i>
+            <h3>Prism Mirror™</h3>
+            <p>Our proprietary grid engine allows you to monitor all active accounts in real-time without refreshing.</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-shield-halved"></i>
+            <h3>Enterprise Grade</h3>
+            <p>Optimized for performance and memory efficiency. Designed for CEL-RON customer needs.</p>
+        </div>
+    </section>
+
+    <section class="section-split" id="about">
+        <div class="section-text">
+            <h2>About <span>PrismWSP™</span></h2>
+            <p>PrismWSP is a professional-grade communication suite built for users who need to manage multiple WhatsApp presence with speed and precision.</p>
+            <p>Developed specifically for the high-demand workflows of <strong>CEL-RON ENTERPRISES</strong> customers, the software features native desktop performance that far exceeds standard browser capabilities.</p>
+        </div>
+        <div style="flex: 1; background: var(--glass-bg); height: 300px; border-radius: 24px; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center;">
+            <img src="assets/product_logo.png" style="width: 150px; opacity: 0.8;">
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="contact-box">
+            <h2>Get in Touch</h2>
+            <p>Have questions or need technical support? Connect with us directly.</p>
+            <div class="contact-links">
+                <a href="https://wa.me/6581962270" class="contact-link">
+                    <i class="fab fa-whatsapp"></i> +65 81962270
+                </a>
+                <a href="mailto:sales@celron.net" class="contact-link">
+                    <i class="fas fa-envelope"></i> sales@celron.net
+                </a>
+            </div>
+            <p style="margin-top: 40px; font-size: 0.9rem; opacity: 0.8;">
+                <strong>CEL-RON ENTERPRISES PTE LTD, SINGAPORE</strong>
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 CEL-RON ENTERPRISES PTE LTD. All Rights Reserved.</p>
+        <p style="margin-top: 10px; font-size: 0.8rem;">PrismWSP™ and Prism Mirror™ are trademarks of CEL-RON ENTERPRISES.</p>
+    </footer>
+
+    <!-- Voucher Modal -->
+    <div id="voucherModal" class="voucher-modal-overlay">
+        <div class="voucher-modal-content">
+            <button class="close-modal" id="closeVoucherBtn">&times;</button>
+            <div style="font-size: 3rem; color: var(--primary-green); margin-bottom: 20px;">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h2 style="margin-bottom: 10px;">Security Verification</h2>
+            <p style="color: var(--text-dim); margin-bottom: 25px; font-size: 0.95rem;">Please enter your professional voucher code to begin the download.</p>
             
-            <div class="viewport-content" id="viewportContent">
-                <!-- Landing Page / Empty State -->
-                <div class="landing-page" id="landingPage">
-                    <div class="landing-logo-container">
-                        <img src="assets/product_logo.png" alt="Prism Mirror Product Logo">
-                    </div>
-                    
-                    <h1 class="landing-title">Prism Mirror™ <span style="font-weight: 300; font-size: 0.8em; vertical-align: top;">Suite</span></h1>
-                    <p class="landing-subtitle">A Premium Product from CEL-RON ENTERPRISES PTE LTD</p>
-
-                    <div class="landing-steps">
-                        <div class="step-item">
-                            <div class="step-number">1</div>
-                            <div class="step-text">Add an account</div>
-                            <div class="step-subtext">Click the + button below to create your first profile</div>
-                        </div>
-                        <div class="step-item">
-                            <div class="step-number">2</div>
-                            <div class="step-text">Scan the QR code</div>
-                            <div class="step-subtext">With your phone's WhatsApp camera</div>
-                        </div>
-                        <div class="step-item">
-                            <div class="step-number">3</div>
-                            <div class="step-text">Start chatting</div>
-                            <div class="step-subtext">Switch between accounts instantly without logging out</div>
-                        </div>
-                    </div>
-
-                    <button class="landing-btn" id="landingGetStartedBtn">Get Started Now</button>
-                </div>
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="voucherInput" placeholder="CELRON-XXXX-2026" style="width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; color: white; text-align: center; font-weight: 700; letter-spacing: 2px; font-size: 1.1rem; outline: none; transition: 0.3s;">
+                <p id="voucherError" style="color: #ef4444; font-size: 0.85rem; margin-top: 10px; display: none;">Invalid voucher code. Please try again.</p>
             </div>
-        </main>
-    </div>
-
-    <!-- Modals -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-content">
-            <h3 class="modal-title" id="modalTitle">Add New Account</h3>
-            <div class="form-group">
-                <label for="accName">Account Name</label>
-                <input type="text" id="accName" placeholder="e.g. Work WhatsApp">
-            </div>
-            <div class="form-group">
-                <label for="accIcon">Account Icon (Emoji or Initial)</label>
-                <input type="text" id="accIcon" placeholder="e.g. 💼">
-            </div>
-            <div class="form-group">
-                <label for="accColor">Accent Color</label>
-                <input type="color" id="accColor" value="#10b981">
-            </div>
-            <div class="btn-group">
-                <button class="btn btn-secondary" id="cancelModal">Cancel</button>
-                <button class="btn btn-primary" id="saveAccountBtn">Save Account</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Settings Modal -->
-    <div class="modal-overlay" id="settingsModal">
-        <div class="modal-content" style="max-width: 550px;">
-            <h3 class="modal-title">System Settings</h3>
             
-            <div class="settings-section">
-                <h4><i class="fas fa-desktop"></i> Prism Mirror (Split Screen)</h4>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <span class="setting-label">Enable Prism Mirror</span>
-                        <span class="setting-desc">Allow splitting the screen into multiple windows</span>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="settingEnableMirror" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <span class="setting-label">Max Active Windows</span>
-                        <span class="setting-desc">Limit slots to save system resources</span>
-                    </div>
-                    <select id="settingMaxSlots" class="setting-select">
-                        <option value="2">2 Windows (Optimized)</option>
-                        <option value="4" selected>4 Windows (Power User)</option>
-                    </select>
-                </div>
-
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <span class="setting-label">Window Gap</span>
-                        <span class="setting-desc">Spacing between split windows</span>
-                    </div>
-                    <input type="range" id="settingWindowGap" min="0" max="20" value="8" class="setting-range">
-                </div>
-            </div>
-
-            <div class="settings-section" style="margin-top: 24px;">
-                <h4><i class="fas fa-bell"></i> Notifications</h4>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <span class="setting-label">Notification Sound</span>
-                        <span class="setting-desc">Play a sound when a new message arrives</span>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="settingEnableSound" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="settings-section" style="margin-top: 24px;">
-                <h4><i class="fas fa-branding"></i> Company Branding</h4>
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <span class="setting-label">Show CEL-RON Badge</span>
-                        <span class="setting-desc">Display company credits in the header</span>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="settingShowBranding" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="settings-section" style="margin-top: 24px;">
-                <h4><i class="fas fa-users-cog"></i> Per-Account Controls</h4>
-                <div id="settingsAccountList" style="max-height: 200px; overflow-y: auto; background: var(--bg-primary); border-radius: 12px; padding: 12px; border: 1px solid var(--glass-border);">
-                    <!-- Dynamic account settings will be injected here -->
-                </div>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn btn-primary" id="closeSettingsBtn">Save & Apply</button>
-            </div>
+            <button id="verifyBtn" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                Verify & Download
+            </button>
+            
+            <p style="margin-top: 25px; font-size: 0.85rem; color: var(--text-dim);">
+                Don't have a voucher? <a href="#contact" id="contactForVoucher" style="color: var(--primary-green); text-decoration: none; font-weight: 600;">Contact CEL-RON for a free voucher</a>
+            </p>
         </div>
     </div>
 
-    <!-- About Modal -->
-    <div class="modal-overlay" id="aboutModal">
-        <div class="modal-content" style="max-width: 500px;">
-            <div style="text-align: center; margin-bottom: 24px;">
-                <div style="margin-bottom: 16px;">
-                    <img src="assets/product_logo.png" alt="Prism Mirror Trademark Logo" style="width: 80px; height: 80px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.2);">
-                </div>
-                <h3 style="font-size: 1.5rem; margin-bottom: 4px;">PrismWSP™</h3>
-                <p style="color: var(--text-secondary); font-size: 0.9rem;">Version 1.0.0</p>
-            </div>
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
 
-            <div style="background: var(--bg-primary); padding: 20px; border-radius: 16px; font-size: 0.9rem; line-height: 1.6; border: 1px solid var(--glass-border);">
-                <p><strong>Software by:</strong> Natarajan Rameshkumar</p>
-                <p><strong>Company:</strong> CEL-RON ENTERPRISES PTE LTD, SINGAPORE</p>
-                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 12px 0;">
-                <p><i class="fab fa-whatsapp"></i> +65 81962270</p>
-                <p><i class="fas fa-envelope"></i> sales@celron.net</p>
-                <p><i class="fas fa-globe"></i> <a href="http://www.celron.net" target="_blank" style="color: var(--accent-primary); text-decoration: none;">www.celron.net</a></p>
-            </div>
+        // Voucher Modal Logic
+        const downloadBtn = document.getElementById('downloadBtnTrigger');
+        const voucherModal = document.getElementById('voucherModal');
+        const closeVoucherBtn = document.getElementById('closeVoucherBtn');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const voucherInput = document.getElementById('voucherInput');
+        const voucherError = document.getElementById('voucherError');
+        const contactForVoucher = document.getElementById('contactForVoucher');
 
-            <div style="margin-top: 24px; font-size: 0.75rem; color: var(--text-secondary); text-align: center;">
-                <p>© 2024 CEL-RON ENTERPRISES PTE LTD. All Rights Reserved.</p>
-                <p style="margin-top: 8px; color: var(--accent-primary);">Prepared for free distribution of CELRON customers.</p>
-            </div>
+        const VALID_CODE = 'CELRON-PRO-2026';
+        const DOWNLOAD_URL = 'https://drive.google.com/u/0/uc?id=1iAXpGRCbzMDI0PFjn9NAUziMzQWjvxrU&export=download';
 
-            <div class="btn-group">
-                <button class="btn btn-primary" id="closeAboutBtn">Close</button>
-            </div>
-        </div>
-    </div>
+        downloadBtn.addEventListener('click', () => {
+            voucherModal.style.display = 'flex';
+        });
 
-    <script src="app.js"></script>
+        closeVoucherBtn.addEventListener('click', () => {
+            voucherModal.style.display = 'none';
+        });
+
+        contactForVoucher.addEventListener('click', () => {
+            voucherModal.style.display = 'none';
+        });
+
+        verifyBtn.addEventListener('click', () => {
+            const code = voucherInput.value.trim().toUpperCase();
+            if (code === VALID_CODE) {
+                voucherError.style.display = 'none';
+                verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+                setTimeout(() => {
+                    window.location.href = DOWNLOAD_URL;
+                    voucherModal.style.display = 'none';
+                    verifyBtn.innerHTML = 'Verify & Download';
+                    voucherInput.value = '';
+                }, 1500);
+            } else {
+                voucherError.style.display = 'block';
+                voucherInput.style.borderColor = '#ef4444';
+            }
+        });
+
+        voucherInput.addEventListener('input', () => {
+            voucherError.style.display = 'none';
+            voucherInput.style.borderColor = 'var(--glass-border)';
+        });
+
+        // Close on escape
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && voucherModal.style.display === 'flex') {
+                voucherModal.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

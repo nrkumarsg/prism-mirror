@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build-electron": "electron-builder"
   },
   "author": "Antigravity",
   "license": "ISC",
@@ -17,7 +17,7 @@
     "appId": "com.prismwsp.app",
     "win": {
       "target": "nsis",
-      "icon": "icon.ico"
+      "icon": "icon.png"
     },
     "nsis": {
       "oneClick": false,

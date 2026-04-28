@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrismWSP - Premium Multi-WhatsApp Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Switcher -->
+        <aside class="sidebar-switcher" id="sidebarSwitcher">
+            <!-- Toggle Sidebar Button -->
+            <div class="switcher-item" id="togglePanelBtn" title="Toggle Account Panel" style="background: transparent; border-bottom: 1px solid var(--glass-border); margin-bottom: 24px; border-radius: 0; width: 100%;">
+                <i class="fas fa-bars"></i>
+            </div>
+            <!-- Logo Section -->
+            <div class="app-logo" style="margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+                <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="prismGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#10b981" />
+                            <stop offset="100%" style="stop-color:#3b82f6" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <path d="M50 15L85 75H15L50 15Z" stroke="url(#prismGrad)" stroke-width="4" filter="url(#glow)"/>
+                    <path d="M50 15V75" stroke="url(#prismGrad)" stroke-opacity="0.3" stroke-width="2"/>
+                    <path d="M15 75L50 45L85 75" stroke="url(#prismGrad)" stroke-opacity="0.3" stroke-width="2"/>
+                </svg>
+                <div class="brand-text" style="font-size: 0.6rem; font-weight: 700; color: var(--accent-primary); letter-spacing: 1px; text-align: center;">CEL-RON</div>
+            </div>
+            <!-- switcher items will be injected here -->
+            <div class="switcher-item" title="Help & About" id="helpBtn" style="margin-top: auto; margin-bottom: 12px;">
+                <i class="fas fa-question-circle"></i>
+            </div>
+            <div class="switcher-item" title="System Settings" id="globalSettingsBtn">
+                <i class="fas fa-cog"></i>
+            </div>
+        </aside>
+        <div class="resizer" id="resizerSidebar"></div>
+
+        <!-- Account Panel -->
+        <section class="account-panel">
+            <header class="panel-header">
+                <h2>Accounts</h2>
+                <p id="accountCount">0 accounts active</p>
+                <div class="search-box" style="margin-top: 16px; position: relative;">
+                    <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 0.8rem;"></i>
+                    <input type="text" id="accountSearch" placeholder="Search accounts..." style="width: 100%; padding: 8px 12px 8px 32px; background: var(--bg-primary); border: 1px solid var(--glass-border); border-radius: 8px; color: white; font-size: 0.85rem; outline: none;">
+                </div>
+            </header>
+            
+            <div class="account-list" id="accountList">
+                <!-- account items will be injected here -->
+            </div>
+
+            <button class="add-account-btn" id="addAccountBtn">
+                <i class="fas fa-plus"></i>
+                Add Account
+            </button>
+        </section>
+        <div class="resizer" id="resizerAccount"></div>
+
+        <!-- Main Viewport -->
+        <main class="main-viewport">
+            <header class="viewport-header" id="viewportHeader">
+                <div class="active-account-info">
+                    <span id="activeAccountName">Choose an account to start</span>
+                    <span class="brand-badge">by CEL-RON</span>
+                </div>
+                <div class="layout-switcher" id="layoutSwitcher">
+                    <button class="layout-btn active" data-layout="1" title="Single View"><i class="fas fa-square"></i></button>
+                    <button class="layout-btn" data-layout="2" title="Dual View"><i class="fas fa-columns"></i></button>
+                    <button class="layout-btn" data-layout="4" title="Quad View"><i class="fas fa-th-large"></i></button>
+                </div>
+                <div class="viewport-actions">
+                    <button class="btn btn-secondary" id="toggleFocusBtn" title="Maximize Viewport (Focus Mode)">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button class="btn btn-secondary" id="editProfileBtn" style="padding: 6px 12px; font-size: 0.8rem; display: none;">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+            </header>
+            
+            <button id="exitFocusBtn" class="btn btn-primary" style="position: fixed; top: 10px; right: 10px; z-index: 2000; display: none; width: auto; padding: 8px 24px; font-size: 0.9rem; border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid white;">
+                <i class="fas fa-compress"></i> Exit Maximize
+            </button>
+            
+            <div class="viewport-content" id="viewportContent">
+                <!-- Landing Page / Empty State -->
+                <div class="landing-page" id="landingPage">
+                    <div class="landing-logo-container">
+                        <img src="assets/product_logo.png" alt="Prism Mirror Product Logo">
+                    </div>
+                    
+                    <h1 class="landing-title">Prism Mirror™ <span style="font-weight: 300; font-size: 0.8em; vertical-align: top;">Suite</span></h1>
+                    <p class="landing-subtitle">A Premium Product from CEL-RON ENTERPRISES PTE LTD</p>
+
+                    <div class="landing-steps">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-text">Add an account</div>
+                            <div class="step-subtext">Click the + button below to create your first profile</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-text">Scan the QR code</div>
+                            <div class="step-subtext">With your phone's WhatsApp camera</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-text">Start chatting</div>
+                            <div class="step-subtext">Switch between accounts instantly without logging out</div>
+                        </div>
+                    </div>
+
+                    <button class="landing-btn" id="landingGetStartedBtn">Get Started Now</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modalTitle">Add New Account</h3>
+            <div class="form-group">
+                <label for="accName">Account Name</label>
+                <input type="text" id="accName" placeholder="e.g. Work WhatsApp">
+            </div>
+            <div class="form-group">
+                <label for="accIcon">Account Icon (Emoji or Initial)</label>
+                <input type="text" id="accIcon" placeholder="e.g. 💼">
+            </div>
+            <div class="form-group">
+                <label for="accColor">Accent Color</label>
+                <input type="color" id="accColor" value="#10b981">
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="cancelModal">Cancel</button>
+                <button class="btn btn-danger" id="deleteAccountBtn" style="background: #ef4444; color: white; display: none;">Delete</button>
+                <button class="btn btn-primary" id="saveAccountBtn">Save Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content" style="max-width: 550px;">
+            <h3 class="modal-title">System Settings</h3>
+            
+            <div class="settings-section">
+                <h4><i class="fas fa-desktop"></i> Prism Mirror (Split Screen)</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Enable Prism Mirror</span>
+                        <span class="setting-desc">Allow splitting the screen into multiple windows</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="settingEnableMirror" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Max Active Windows</span>
+                        <span class="setting-desc">Limit slots to save system resources</span>
+                    </div>
+                    <select id="settingMaxSlots" class="setting-select">
+                        <option value="2">2 Windows (Optimized)</option>
+                        <option value="4" selected>4 Windows (Power User)</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Window Gap</span>
+                        <span class="setting-desc">Spacing between split windows</span>
+                    </div>
+                    <input type="range" id="settingWindowGap" min="0" max="20" value="8" class="setting-range">
+                </div>
+            </div>
+
+            <div class="settings-section" style="margin-top: 24px;">
+                <h4><i class="fas fa-bell"></i> Notifications</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Notification Sound</span>
+                        <span class="setting-desc">Play a sound when a new message arrives</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="settingEnableSound" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section" style="margin-top: 24px;">
+                <h4><i class="fas fa-microchip"></i> Performance</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">RAM Saver Mode</span>
+                        <span class="setting-desc">Unload inactive accounts to save system memory</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="settingRamSaver">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <button class="btn btn-secondary" onclick="window.app.clearAllPool()" style="width: 100%; margin-top: 10px; font-size: 0.8rem;">
+                    <i class="fas fa-sync-alt"></i> Refresh All Sessions
+                </button>
+            </div>
+
+            <div class="settings-section" style="margin-top: 24px;">
+                <h4><i class="fas fa-branding"></i> Company Branding</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Show CEL-RON Badge</span>
+                        <span class="setting-desc">Display company credits in the header</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="settingShowBranding" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section" style="margin-top: 24px;">
+                <h4><i class="fas fa-users-cog"></i> Per-Account Controls</h4>
+                <div id="settingsAccountList" style="max-height: 200px; overflow-y: auto; background: var(--bg-primary); border-radius: 12px; padding: 12px; border: 1px solid var(--glass-border);">
+                    <!-- Dynamic account settings will be injected here -->
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="closeSettingsBtn">Save & Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal-overlay" id="aboutModal">
+        <div class="modal-content" style="max-width: 550px; padding: 0; overflow: hidden; background: var(--bg-sidebar);">
+            <div style="background: var(--landing-bg); padding: 40px 32px; text-align: center; color: white; position: relative;">
+                <div style="position: absolute; top: 20px; right: 20px; opacity: 0.1; font-size: 5rem;"><i class="fas fa-info-circle"></i></div>
+                <div style="margin-bottom: 20px; position: relative; z-index: 1;">
+                    <img src="assets/product_logo.png" alt="Prism Mirror Logo" style="width: 90px; height: 90px; border-radius: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.2);">
+                </div>
+                <h3 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.5px;">PrismWSP™ Suite</h3>
+                <p style="opacity: 0.9; font-weight: 500; font-size: 0.95rem;">Premium Multi-Account Manager</p>
+                <div style="display: inline-block; margin-top: 12px; padding: 4px 12px; background: rgba(0,0,0,0.2); border-radius: 50px; font-size: 0.75rem; font-weight: 600;">v1.0.0 Production</div>
+            </div>
+
+            <div style="padding: 32px; background: var(--bg-secondary);">
+                <div style="margin-bottom: 24px;">
+                    <h4 style="color: var(--accent-primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-star"></i> Product Information
+                    </h4>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-primary); margin-bottom: 12px;">
+                        Prism Mirror™ is a professional-grade multi-instance manager designed specifically for businesses to streamline their communication workflows. It allows for seamless switching and parallel monitoring of multiple accounts with optimized system resource usage.
+                    </p>
+                    <div style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--accent-primary); padding: 12px 16px; border-radius: 4px; font-weight: 600; color: var(--accent-primary); font-size: 0.85rem;">
+                        <i class="fas fa-gift"></i> This software is provided <strong>FREE OF COST</strong> exclusively for the esteemed customers of CEL-RON ENTERPRISES.
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <h4 style="color: var(--accent-primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-building"></i> Corporate Identity
+                    </h4>
+                    <div style="background: var(--bg-primary); padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border);">
+                        <div style="margin-bottom: 15px;">
+                            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 2px;">Developed By</div>
+                            <div style="font-weight: 700; font-size: 1.1rem; color: white;">Natarajan Rameshkumar</div>
+                        </div>
+                        <div style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;">CEL-RON ENTERPRISES PTE LTD</div>
+                        <div style="color: var(--text-secondary); font-size: 0.85rem;">Singapore Corporate HQ</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 32px;">
+                    <h4 style="color: var(--accent-primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-headset"></i> Support & Contact
+                    </h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <a href="https://wa.me/6581962270" target="_blank" style="text-decoration: none; background: #25d366; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 0.85rem;">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="mailto:sales@celron.net" style="text-decoration: none; background: #3b82f6; color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 0.85rem;">
+                            <i class="fas fa-envelope"></i> Email
+                        </a>
+                        <a href="http://www.celron.net" target="_blank" style="grid-column: span 2; text-decoration: none; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 0.85rem;">
+                            <i class="fas fa-globe"></i> Website: www.celron.net / www.celron.shop
+                        </a>
+                    </div>
+                </div>
+
+                <div style="text-align: center; border-top: 1px solid var(--glass-border); padding-top: 20px; font-size: 0.75rem; color: var(--text-secondary);">
+                    <p>© 2024 CEL-RON ENTERPRISES PTE LTD. All Rights Reserved.</p>
+                </div>
+            </div>
+
+            <div style="padding: 20px 32px; background: var(--bg-primary); border-top: 1px solid var(--glass-border); display: flex; justify-content: flex-end;">
+                <button class="btn btn-primary" id="closeAboutBtn" style="min-width: 120px; border-radius: 50px;">Understood</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteConfirmModal">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div style="color: #ef4444; font-size: 3rem; margin-bottom: 16px;"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3 class="modal-title" style="margin-bottom: 8px;">Security Verification</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">To permanently delete this account, please enter the security code below.</p>
+            
+            <div id="captchaDisplay" style="background: #000; color: var(--accent-primary); font-family: 'Courier New', Courier, monospace; font-size: 1.5rem; letter-spacing: 8px; padding: 12px; border-radius: 8px; font-weight: 700; margin-bottom: 16px; user-select: none; border: 1px dashed var(--accent-primary);">XXXXXX</div>
+            
+            <div class="form-group">
+                <input type="text" id="captchaInput" placeholder="Type the code here..." style="text-align: center; text-transform: uppercase; font-weight: 700;">
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn btn-danger" id="finalDeleteBtn" style="background: #ef4444; color: white; opacity: 0.5; pointer-events: none;">Confirm Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -9,3 +9,4 @@ assets/product_logo_old.png
 prismwsp_logo_*.png
 media__*.png
 tmp/
+.vercel
